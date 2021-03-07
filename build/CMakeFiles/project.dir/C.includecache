@@ -6,9 +6,31 @@
 
 #IncludeRegexTransform: 
 
+../inc/shaders.h
+GL/glew.h
+-
+
 ../inc/viscous.h
 
+../inc/window.h
+GL/glew.h
+-
+GLFW/glfw3.h
+-
+stdio.h
+-
+
 /home/antoine/Documents/Viscous/CPU/src/project.c
+viscous.h
+/home/antoine/Documents/Viscous/CPU/src/viscous.h
+window.h
+/home/antoine/Documents/Viscous/CPU/src/window.h
+shaders.h
+/home/antoine/Documents/Viscous/CPU/src/shaders.h
+GL/glew.h
+-
+GLFW/glfw3.h
+-
 stdio.h
 -
 stdlib.h
@@ -17,10 +39,8 @@ math.h
 -
 string.h
 -
-.../matplotlib-cpp-master/matplotlibcpp.h
-/home/antoine/Documents/Viscous/CPU/src/.../matplotlib-cpp-master/matplotlibcpp.h
 omp.h
 -
-viscous.h
-/home/antoine/Documents/Viscous/CPU/src/viscous.h
+time.h
+-
 

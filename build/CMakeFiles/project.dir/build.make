@@ -59,55 +59,55 @@ include CMakeFiles/project.dir/flags.make
 
 CMakeFiles/project.dir/src/project.c.o: CMakeFiles/project.dir/flags.make
 CMakeFiles/project.dir/src/project.c.o: ../src/project.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/antoine/Documents/Viscous/CPU/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/project.dir/src/project.c.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/project.dir/src/project.c.o -c /home/antoine/Documents/Viscous/CPU/src/project.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/antoine/Documents/Viscous/CPU/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/project.dir/src/project.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/project.dir/src/project.c.o   -c /home/antoine/Documents/Viscous/CPU/src/project.c
 
 CMakeFiles/project.dir/src/project.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/project.dir/src/project.c.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/antoine/Documents/Viscous/CPU/src/project.c > CMakeFiles/project.dir/src/project.c.i
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/project.dir/src/project.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/antoine/Documents/Viscous/CPU/src/project.c > CMakeFiles/project.dir/src/project.c.i
 
 CMakeFiles/project.dir/src/project.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/project.dir/src/project.c.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/antoine/Documents/Viscous/CPU/src/project.c -o CMakeFiles/project.dir/src/project.c.s
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/project.dir/src/project.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/antoine/Documents/Viscous/CPU/src/project.c -o CMakeFiles/project.dir/src/project.c.s
 
 CMakeFiles/project.dir/src/shaders.c.o: CMakeFiles/project.dir/flags.make
 CMakeFiles/project.dir/src/shaders.c.o: ../src/shaders.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/antoine/Documents/Viscous/CPU/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/project.dir/src/shaders.c.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/project.dir/src/shaders.c.o -c /home/antoine/Documents/Viscous/CPU/src/shaders.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/antoine/Documents/Viscous/CPU/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/project.dir/src/shaders.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/project.dir/src/shaders.c.o   -c /home/antoine/Documents/Viscous/CPU/src/shaders.c
 
 CMakeFiles/project.dir/src/shaders.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/project.dir/src/shaders.c.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/antoine/Documents/Viscous/CPU/src/shaders.c > CMakeFiles/project.dir/src/shaders.c.i
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/project.dir/src/shaders.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/antoine/Documents/Viscous/CPU/src/shaders.c > CMakeFiles/project.dir/src/shaders.c.i
 
 CMakeFiles/project.dir/src/shaders.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/project.dir/src/shaders.c.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/antoine/Documents/Viscous/CPU/src/shaders.c -o CMakeFiles/project.dir/src/shaders.c.s
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/project.dir/src/shaders.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/antoine/Documents/Viscous/CPU/src/shaders.c -o CMakeFiles/project.dir/src/shaders.c.s
 
 CMakeFiles/project.dir/src/viscous.c.o: CMakeFiles/project.dir/flags.make
 CMakeFiles/project.dir/src/viscous.c.o: ../src/viscous.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/antoine/Documents/Viscous/CPU/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/project.dir/src/viscous.c.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/project.dir/src/viscous.c.o -c /home/antoine/Documents/Viscous/CPU/src/viscous.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/antoine/Documents/Viscous/CPU/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/project.dir/src/viscous.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/project.dir/src/viscous.c.o   -c /home/antoine/Documents/Viscous/CPU/src/viscous.c
 
 CMakeFiles/project.dir/src/viscous.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/project.dir/src/viscous.c.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/antoine/Documents/Viscous/CPU/src/viscous.c > CMakeFiles/project.dir/src/viscous.c.i
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/project.dir/src/viscous.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/antoine/Documents/Viscous/CPU/src/viscous.c > CMakeFiles/project.dir/src/viscous.c.i
 
 CMakeFiles/project.dir/src/viscous.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/project.dir/src/viscous.c.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/antoine/Documents/Viscous/CPU/src/viscous.c -o CMakeFiles/project.dir/src/viscous.c.s
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/project.dir/src/viscous.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/antoine/Documents/Viscous/CPU/src/viscous.c -o CMakeFiles/project.dir/src/viscous.c.s
 
 CMakeFiles/project.dir/src/window.c.o: CMakeFiles/project.dir/flags.make
 CMakeFiles/project.dir/src/window.c.o: ../src/window.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/antoine/Documents/Viscous/CPU/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/project.dir/src/window.c.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/project.dir/src/window.c.o -c /home/antoine/Documents/Viscous/CPU/src/window.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/antoine/Documents/Viscous/CPU/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/project.dir/src/window.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/project.dir/src/window.c.o   -c /home/antoine/Documents/Viscous/CPU/src/window.c
 
 CMakeFiles/project.dir/src/window.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/project.dir/src/window.c.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/antoine/Documents/Viscous/CPU/src/window.c > CMakeFiles/project.dir/src/window.c.i
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/project.dir/src/window.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/antoine/Documents/Viscous/CPU/src/window.c > CMakeFiles/project.dir/src/window.c.i
 
 CMakeFiles/project.dir/src/window.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/project.dir/src/window.c.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/antoine/Documents/Viscous/CPU/src/window.c -o CMakeFiles/project.dir/src/window.c.s
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/project.dir/src/window.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/antoine/Documents/Viscous/CPU/src/window.c -o CMakeFiles/project.dir/src/window.c.s
 
 # Object files for target project
 project_OBJECTS = \
@@ -131,7 +131,7 @@ project: /usr/lib/x86_64-linux-gnu/libOpenGL.so
 project: /usr/lib/x86_64-linux-gnu/libGLX.so
 project: /usr/lib/x86_64-linux-gnu/libGLU.so
 project: CMakeFiles/project.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/antoine/Documents/Viscous/CPU/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable project"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/antoine/Documents/Viscous/CPU/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable project"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/project.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

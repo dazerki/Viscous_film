@@ -11,6 +11,7 @@
 #include <math.h>
 #include <string.h>
 #include <omp.h>
+#include <time.h>
 
 
 
@@ -65,12 +66,12 @@ int main(int argc, char *argv[]){
   GLuint vbo_pos;
   glGenBuffers(1, &vbo_pos);
 
-  GLfloat positions[2*nx*nx];
+	GLfloat positions[2*nx*nx];
   for (int i = 0; i < nx; i++) {
       for (int j = 0; j < nx; j++) {
-          int ind = i*nx+j;
-          positions[2*ind  ] = (float)(-1.0 + 2.0*i/(nx-1));
-          positions[2*ind+1] = (float)(-1.0 + 2.0*j/(nx-1));
+          int ind = j*nx+i;
+          positions[2*ind  ] = (float)(1.0 - 2.0*i/(nx-1));
+          positions[2*ind+1] = (float)(1.0 - 2.0*j/(nx-1));
       }
   }
 
@@ -138,17 +139,12 @@ int main(int argc, char *argv[]){
 
  	omp_set_num_threads(6);
 
-	// float start, end;
-	// start = omp_get_wtime();
-	struct timeval start, end;
+	float start, end;
+
+	// struct timeval start, end;
 
 	while(!glfwWindowShouldClose(window)) {
-    glfwSwapBuffers(window);
-    glfwPollEvents();
-
-    // Clear the screen to black
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+		start = omp_get_wtime();
 
 		for(int p=0; p<n_passe; p++){
 
@@ -375,7 +371,16 @@ int main(int argc, char *argv[]){
 			}
 		}
 	}
+	end = omp_get_wtime();
+	printf("time taken: %f seconds\n", (double)(end-start));
 
+
+	glfwSwapBuffers(window);
+	glfwPollEvents();
+
+	// Clear the screen to black
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
 
 	for (int i = 0; i < nx*nx; i++) {
 			colors[i] = (float) (u[i]);
@@ -390,6 +395,9 @@ int main(int argc, char *argv[]){
 
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			glfwSetWindowShouldClose(window, GL_TRUE);
+
+
+
 }
 
 	// gettimeofday(&start, NULL);
