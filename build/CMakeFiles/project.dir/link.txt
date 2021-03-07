@@ -1,0 +1,1 @@
+/usr/bin/c++  -O3 -fopenmp   CMakeFiles/project.dir/src/project.c.o CMakeFiles/project.dir/src/viscous.c.o  -o project  /usr/lib/x86_64-linux-gnu/libpython3.8.so -lpthread -lm 

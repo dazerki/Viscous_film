@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../inc/viscous.h
+
+/home/antoine/Documents/Viscous/CPU/src/project.c
+stdio.h
+-
+stdlib.h
+-
+math.h
+-
+string.h
+-
+.../matplotlib-cpp-master/matplotlibcpp.h
+/home/antoine/Documents/Viscous/CPU/src/.../matplotlib-cpp-master/matplotlibcpp.h
+omp.h
+-
+viscous.h
+/home/antoine/Documents/Viscous/CPU/src/viscous.h
+

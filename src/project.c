@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include "../matplotlib-cpp-master/matplotlibcpp.h"
+#include "matplotlibcpp.h"
 #include <omp.h>
 #include "viscous.h"
 
@@ -11,32 +11,35 @@
 namespace plt = matplotlibcpp;
 
 int parity(int di, int dj, int i, int j, int rho);
-float min(float a, double b);
-float max(float a, double b);
+float min(float a, float b);
+float max(float a, float b);
 
 int main(int argc, char *argv[]){
 
 	int nx = 512;
 	int ny = 512;
-	double h = 1.0/nx ;
+	float h = 1.0f/nx ;
 
 	// memory allocation
 	float* u = (float*)calloc(nx*ny, sizeof(float));
-	double* H = (double*)calloc(nx*ny, sizeof(double));
-	double* T = (double*)calloc(nx*ny, sizeof(double));
-	double* ctheta = (double*)calloc(nx*ny, sizeof(double));
-	double* height_center = (double*)calloc(nx*ny, sizeof(double));
-	double* height_x_edge = (double*)calloc((nx+1)*ny, sizeof(double));
-	double* height_y_edge = (double*)calloc(nx*(ny+1), sizeof(double));
-	double* H_edge_x = (double*)calloc((nx+1)*ny, sizeof(double));
-	double* H_edge_y = (double*)calloc(nx*(ny+1), sizeof(double));
-	double* k_x = (double*)calloc((nx+1)*ny, sizeof(double));
-	double* k_y = (double*)calloc(nx*(ny+1), sizeof(double));
-	char fileName[] = "brick_fines.txt";
+	float* H = (float*)calloc(nx*ny, sizeof(float));
+	float* T = (float*)calloc(nx*ny, sizeof(float));
+	float* ctheta = (float*)calloc(nx*ny, sizeof(float));
+	float* height_center = (float*)calloc(nx*ny, sizeof(float));
+	float* height_x_edge = (float*)calloc((nx+1)*ny, sizeof(float));
+	float* height_y_edge = (float*)calloc(nx*(ny+1), sizeof(float));
+	float* H_edge_x = (float*)calloc((nx+1)*ny, sizeof(float));
+	float* H_edge_y = (float*)calloc(nx*(ny+1), sizeof(float));
+	float* k_x = (float*)calloc((nx+1)*ny, sizeof(float));
+	float* k_y = (float*)calloc(nx*(ny+1), sizeof(float));
+	char fileName[] = "../src/brick_fines.txt";
+
+
 
 	//init
 	initialization(u, nx, ny, h, 3);
 	read_txt(height_center, height_x_edge, height_y_edge, fileName, nx);
+	printf("HERE");
 	init_surface_height_map(H, T, ctheta, height_center, nx, ny, h);
 	init_height_map_edge(H_edge_x, H_edge_y, k_x, k_y, height_x_edge, height_y_edge, nx, ny, h);
 
@@ -52,22 +55,26 @@ int main(int argc, char *argv[]){
 	// }
 
 	// PARAMETER
-	double tau = 0.001 ;
-	double e = 0.01;
-	double eta = 0.005;
-	double G = 5;
-	double sigma = 0.075;
-	double beta = 0.0;
+	float tau = 0.001f ;
+	float e = 0.01f;
+	float eta = 0.005f;
+	float G = 5.0f;
+	float sigma = 0.075f;
+	float beta = 0.0f;
 	int n_passe = 100;
 	char title[50];
 	float u_tot;
 
+
  	omp_set_num_threads(6);
 
-	double start, end;
-	start = omp_get_wtime();
+	// float start, end;
+	// start = omp_get_wtime();
+	struct timeval start, end;
+	gettimeofday(&start, NULL);
+
 	//LOOP IN TIME
-	for(int t = 0; t < 500; t++){
+	for(int t = 0; t < 100; t++){
 		for(int p=0; p<n_passe; p++){
 
 			// u_tot = 0.0;
@@ -84,11 +91,11 @@ int main(int argc, char *argv[]){
 				 #pragma omp parallel for
 				for(int k=0; k<nx*ny; k++){
 					int rho_ij, i_p, j_p;
-					double W_q, W_p, M, theta, f, delta_u, lap_p, lap_q;
-					double H_p, H_q, T_p, T_q, ct_p, ct_q;
-					double k_E, H_E;
+					float W_q, W_p, M, theta, f, delta_u, lap_p, lap_q;
+					float H_p, H_q, T_p, T_q, ct_p, ct_q;
+					float k_E, H_E;
 					int i,j;
-					double mini;
+					float mini;
 					float u_p, u_q;
 
 
@@ -167,15 +174,15 @@ int main(int argc, char *argv[]){
 
 
 
-						W_q = G*(ny-j-0.5)*h - H[nx*j+i];
-						W_p = G*(ny-j_p-0.5)*h - H[nx*j_p+i_p];
+						W_q = G*(ny-j-0.5f)*h - H[nx*j+i];
+						W_p = G*(ny-j_p-0.5f)*h - H[nx*j_p+i_p];
 
 						//M = (2.0/3.0) * 1.0/(1.0/(u[nx*j_p + i_p]*u[nx*j_p + i_p]*u[nx*j_p + i_p]) + 1.0/(u[nx*j + i]*u[nx*j + i]*u[nx*j + i]));
-						M = 2.0 * u_p*u_p * u_q*u_q /(3.0*(u_q + u_p)) + (e/6.0)*u_q*u_q*u_p*u_p*(H_E+k_E) + (beta/2.0)*(u_p*u_p + u_q*u_q);
+						M = 2.0f * u_p*u_p * u_q*u_q /(3.0f*(u_q + u_p)) + (e/6.0f)*u_q*u_q*u_p*u_p*(H_E+k_E) + (beta/2.0f)*(u_p*u_p + u_q*u_q);
 
 						//3D
-						theta = h*h + (tau*M*(8.0*e + 2.0*eta + G*e*(ct_p + ct_q) - e*(T_p + T_q)));
-						f = -(M*h/(theta)) * ((5.0*e + eta)*(u_q - u_p) - e*(lap_q - lap_p) + W_q-W_p + e*((G*ct_q - T_q)*u_q - (G*ct_p - T_p)*u_p));
+						theta = h*h + (tau*M*(8.0f*e + 2.0f*eta + G*e*(ct_p + ct_q) - e*(T_p + T_q)));
+						f = -(M*h/(theta)) * ((5.0f*e + eta)*(u_q - u_p) - e*(lap_q - lap_p) + W_q-W_p + e*((G*ct_q - T_q)*u_q - (G*ct_p - T_p)*u_p));
 
 						// nouveau
 						// theta = h*h + (2.0*tau*M*(4.0*e + eta));
@@ -188,7 +195,7 @@ int main(int argc, char *argv[]){
 
 						// mini = min(u_p, tau*f/h);
 						// delta_u = max(-u_q, mini);
-						double val = tau*f/h;
+						float val = tau*f/h;
 						if(u_p<val){
 							if(u_p > -u_q){
 								delta_u = u_p;
@@ -223,11 +230,11 @@ int main(int argc, char *argv[]){
 				#pragma omp parallel for
 				for(int k=0; k<nx*ny; k++){
 					int rho_ij, i_p, j_p;
-					double W_q, W_p, M, theta, f, delta_u, lap_p, lap_q;
-					double H_p, H_q, T_p, T_q, ct_p, ct_q;
-					double k_E, H_E;
+					float W_q, W_p, M, theta, f, delta_u, lap_p, lap_q;
+					float H_p, H_q, T_p, T_q, ct_p, ct_q;
+					float k_E, H_E;
 					int i,j;
-					double mini;
+					float mini;
 					float u_p, u_q;
 
 					i = (int) k % nx;
@@ -302,13 +309,13 @@ int main(int argc, char *argv[]){
 						// u_q = u[nx*((j+ny)%ny) + (i+nx)%nx];
 
 						//nouveau
-						W_q = G*(ny-j-0.5)*h - H[nx*j+i];
+						W_q = G*(ny-j-0.5f)*h - H[nx*j+i];
 
 						//printf("gravité: %f, surface: %f \n",G*(ny-j-0.5)*h,H[nx*j+i]);
 						if(j==0){
-							W_p = G*(ny-(-1)-0.5)*h - H[nx*(ny-1) + i_p];
+							W_p = G*(ny-(-1.0f)-0.5f)*h - H[nx*(ny-1) + i_p];
 						}else{
-							W_p = G*(ny-j_p-0.5)*h - H[nx*j_p+i_p];
+							W_p = G*(ny-j_p-0.5f)*h - H[nx*j_p+i_p];
 						}
 
 						//auteurs
@@ -321,15 +328,15 @@ int main(int argc, char *argv[]){
 
 
 						//M = (2.0/3.0) * 1.0/(1.0/(u[nx*j_p + i_p]*u[nx*j_p + i_p]*u[nx*j_p + i_p]) + 1.0/(u[nx*j + i]*u[nx*j + i]*u[nx*j + i]));
-						M = 2.0 * u_q*u_q * u_p*u_p /(3.0*(u_q + u_p)) + (e/6.0)*u_q*u_q*u_p*u_p*(H_E+k_E) + (beta/2.0)*(u_p*u_p + u_q*u_q);
+						M = 2.0f * u_q*u_q * u_p*u_p /(3.0f*(u_q + u_p)) + (e/6.0f)*u_q*u_q*u_p*u_p*(H_E+k_E) + (beta/2.0f)*(u_p*u_p + u_q*u_q);
 
 						//nouveau
 						// theta = h*h + (2.0*tau*M*(4.0*e + eta));
 						// f = -(M*h/(theta)) * ((5.0*e + eta)*(u_q - u_p) - e*(lap_q - lap_p) + W_q-W_p);
 
 						//3D
-						theta = h*h + (tau*M*(8.0*e + 2.0*eta + G*e*(ct_p + ct_q) - e*(T_p + T_q)));
-						f = -(M*h/(theta)) * ((5.0*e + eta)*(u_q - u_p) - e*(lap_q - lap_p) + W_q-W_p + e*((G*ct_q - T_q)*u_q - (G*ct_p - T_p)*u_p));
+						theta = h*h + (tau*M*(8.0f*e + 2.0f*eta + G*e*(ct_p + ct_q) - e*(T_p + T_q)));
+						f = -(M*h/(theta)) * ((5.0f*e + eta)*(u_q - u_p) - e*(lap_q - lap_p) + W_q-W_p + e*((G*ct_q - T_q)*u_q - (G*ct_p - T_p)*u_p));
 
 						//auteurs
 						// theta = 1.0 + (2.0*tau*M*(5.0*e + eta));
@@ -340,7 +347,7 @@ int main(int argc, char *argv[]){
 						// mini = min(u_p,tau*f/h);
 						// delta_u = max(-u_q, mini);
 
-						double val = tau*f/h;
+						float val = tau*f/h;
 						if(u_p<val){
 							if(u_p > -u_q){
 								delta_u = u_p;
@@ -375,16 +382,25 @@ int main(int argc, char *argv[]){
     plt::imshow(&(u[0]), ny, nx, colors);
 
     // Show plots
-    plt::pause(0.1);
+    plt::pause(0.00001f);
 
-		//printf("t = %d\n", t);
 
 	}
-		end = omp_get_wtime();
-		printf("time taken: %f seconds", end-start);
+	// end = omp_get_wtime();
+	// printf("time taken: %f seconds", end-start);
+	gettimeofday(&end, NULL);
+
+	float delta = ((end.tv_sec  - start.tv_sec) * 1000000u +
+	         end.tv_usec - start.tv_usec) / 1.e6;
+  printf("Time taken: %f \n", delta);
 
 	//free memory
 	free(u);
+	free(H); free(T);
+	//free(height_center);
+	free(height_x_edge); free(height_y_edge);
+	//free(ctheta);
+	free(H_edge_x); free(H_edge_y); free(k_x); free(k_y);
 
 	printf("\n *Happy computer sound* \n");
 
@@ -396,7 +412,7 @@ int parity(int di, int dj, int i, int j, int rho){
 	return ((dj+1)*i + (di+1)*j + rho) % 4;
 }
 
-float min(float a, double b){
+float min(float a, float b){
 	if(a<b){
 		return a;
 	} else{
@@ -404,7 +420,7 @@ float min(float a, double b){
 	}
 }
 
-float max(float a, double b){
+float max(float a, float b){
 	if(a>b){
 		return a;
 	} else{
