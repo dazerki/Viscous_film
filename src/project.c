@@ -1,14 +1,22 @@
+#include "viscous.h"
+#include "window.h"
+#include "shaders.h"
+
+#define GLEW_STATIC
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include "matplotlibcpp.h"
 #include <omp.h>
-#include "viscous.h"
 
 
 
-namespace plt = matplotlibcpp;
+
+
+
 
 int parity(int di, int dj, int i, int j, int rho);
 float min(float a, float b);
@@ -39,20 +47,82 @@ int main(int argc, char *argv[]){
 	//init
 	initialization(u, nx, ny, h, 3);
 	read_txt(height_center, height_x_edge, height_y_edge, fileName, nx);
-	printf("HERE");
 	init_surface_height_map(H, T, ctheta, height_center, nx, ny, h);
 	init_height_map_edge(H_edge_x, H_edge_y, k_x, k_y, height_x_edge, height_y_edge, nx, ny, h);
 
-	//BORDER
-	// for(int i=0; i<nx; i++){
-	// 	u[i] = 0.;
-	// 	u[nx*(ny-1) + i] = 0.;
-	// }
-	//
-	// for(int j=0; j<ny; j++){
-	// 	u[nx*j] = 0.;
-	// 	u[nx*j + nx-1] = 0.;
-	// }
+	// Initialise window
+  GLFWwindow *window = init_window();
+
+  // Initialise shaders
+  init_shaders();
+
+  // Create Vertex Array Object
+  GLuint vao;
+  glGenVertexArrays(1, &vao);
+  glBindVertexArray(vao);
+
+  // Create a Vertex Buffer Object for positions
+  GLuint vbo_pos;
+  glGenBuffers(1, &vbo_pos);
+
+  GLfloat positions[2*nx*nx];
+  for (int i = 0; i < nx; i++) {
+      for (int j = 0; j < nx; j++) {
+          int ind = i*nx+j;
+          positions[2*ind  ] = (float)(-1.0 + 2.0*i/(nx-1));
+          positions[2*ind+1] = (float)(-1.0 + 2.0*j/(nx-1));
+      }
+  }
+
+  glBindBuffer(GL_ARRAY_BUFFER, vbo_pos);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
+
+  // Specify vbo_pos' layout
+  GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
+  glEnableVertexAttribArray(posAttrib);
+  glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+  // Create an Element Buffer Object and copy the element data to it
+  GLuint ebo;
+  glGenBuffers(1, &ebo);
+
+	GLuint elements[4*(nx-1)*(nx-1)];
+    for (int i = 0; i < nx-1; i++) {
+        for (int j = 0; j < nx-1; j++) {
+            int ind  = i*nx+j;
+            int ind_ = i*(nx-1)+j;
+
+            elements[4*ind_  ] = ind;
+            elements[4*ind_+1] = ind+1;
+            elements[4*ind_+2] = ind+nx;
+            elements[4*ind_+3] = ind+nx+1;
+        }
+    }
+
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
+
+	// Create a Vertex Buffer Object for colors
+  GLuint vbo_colors;
+  glGenBuffers(1, &vbo_colors);
+
+  GLfloat colors[nx*nx];
+  for (int i = 0; i < nx; i++) {
+      for (int j = 0; j < nx; j++) {
+          int ind = i*nx+j;
+          colors[ind] = (float) u[ind];
+      }
+  }
+
+  glBindBuffer(GL_ARRAY_BUFFER, vbo_colors);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STREAM_DRAW);
+
+  // Specify vbo_color's layout
+  GLint colAttrib = glGetAttribLocation(shaderProgram, "color");
+  glEnableVertexAttribArray(colAttrib);
+  glVertexAttribPointer(colAttrib, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+
 
 	// PARAMETER
 	float tau = 0.001f ;
@@ -71,17 +141,16 @@ int main(int argc, char *argv[]){
 	// float start, end;
 	// start = omp_get_wtime();
 	struct timeval start, end;
-	gettimeofday(&start, NULL);
 
-	//LOOP IN TIME
-	for(int t = 0; t < 100; t++){
+	while(!glfwWindowShouldClose(window)) {
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+
+    // Clear the screen to black
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
 		for(int p=0; p<n_passe; p++){
-
-			// u_tot = 0.0;
-			// for(int i = 0; i <nx*ny; i++){
-			// 	u_tot = u_tot + u[i];
-			// }
-			// printf("u_tot = %f \n", u_tot);
 
 			//Flux in direcion (di, dj) = (1,0) Horizontal
 			int di = 1;
@@ -163,38 +232,15 @@ int main(int argc, char *argv[]){
 						k_E = k_x[(nx+1)*j + i];
 						H_E = H_edge_x[(nx+1)*j + i];
 
-						// i_p = (i - di + nx)%nx;
-						// j_p = (j - dj + ny)%ny;
-						//
-						// lap_q = (u[nx*((ny+j)%ny) + (nx+(i+1))%nx] + u[nx*((ny+j+1)%ny) + (nx+i)%nx] + u[nx*((ny+(j-1))%ny) + (i+nx)%nx]);
-						// lap_p = (u[nx*((j_p+ny)%ny) + ((i_p-1+nx)%nx)] + u[nx*((j_p+1+ny)%ny) + (i_p+nx)%nx] + u[nx*((j_p-1+ny)%ny) + (i_p+nx)%nx]);
-						//
-						// u_p = u[nx*((ny+j_p)%ny) + (nx+i_p)%nx];
-						// u_q = u[nx*((ny+j)%ny) + (nx+i)%nx];
-
-
-
 						W_q = G*(ny-j-0.5f)*h - H[nx*j+i];
 						W_p = G*(ny-j_p-0.5f)*h - H[nx*j_p+i_p];
 
-						//M = (2.0/3.0) * 1.0/(1.0/(u[nx*j_p + i_p]*u[nx*j_p + i_p]*u[nx*j_p + i_p]) + 1.0/(u[nx*j + i]*u[nx*j + i]*u[nx*j + i]));
 						M = 2.0f * u_p*u_p * u_q*u_q /(3.0f*(u_q + u_p)) + (e/6.0f)*u_q*u_q*u_p*u_p*(H_E+k_E) + (beta/2.0f)*(u_p*u_p + u_q*u_q);
 
 						//3D
 						theta = h*h + (tau*M*(8.0f*e + 2.0f*eta + G*e*(ct_p + ct_q) - e*(T_p + T_q)));
 						f = -(M*h/(theta)) * ((5.0f*e + eta)*(u_q - u_p) - e*(lap_q - lap_p) + W_q-W_p + e*((G*ct_q - T_q)*u_q - (G*ct_p - T_p)*u_p));
 
-						// nouveau
-						// theta = h*h + (2.0*tau*M*(4.0*e + eta));
-						// f = -(M*h/(theta)) * ((5.0*e+eta)*(u_q - u_p) - e*(lap_q - lap_p)); //+ W_q-W_p
-
-						//auteurs
-						// theta = 1.0 + (2.0*tau*M*(5.0*e + eta));
-						// f = -(M/(theta)) * ((5.0*e+eta)*(u_q - u_p) - e*(lap_q - lap_p)); //+ W_q-W_p
-
-
-						// mini = min(u_p, tau*f/h);
-						// delta_u = max(-u_q, mini);
 						float val = tau*f/h;
 						if(u_p<val){
 							if(u_p > -u_q){
@@ -210,13 +256,8 @@ int main(int argc, char *argv[]){
 							}
 						}
 
-						// if(delta_u > 0.1){
-						// 	printf("delta u = %f at i=%d and j=%d \n", delta_u, i, j);
-						// }
-
 						u[nx*j + i] = u_q + delta_u;
 						u[nx*j_p + i_p] = u_p - delta_u;
-
 
 					}
 				}
@@ -298,54 +339,20 @@ int main(int argc, char *argv[]){
 						k_E = k_y[(nx)*j + i];
 						H_E = H_edge_y[(nx)*j + i];
 
-
-						// i_p = (i - di + nx)%nx;
-						// j_p = (j - dj + ny)%ny;
-						//
-						// lap_q = (u[nx*((j+ny)%ny) + (i+1+nx)%nx] + u[nx*((j+1+ny)%ny) + (i+nx)%nx] + u[nx*((j+ny)%ny) + (i-1+nx)%nx]);
-						// lap_p = (u[nx*((j_p+ny)%ny) + (i_p-1+nx)%nx] + u[nx*((j_p+ny)%ny) + (i_p+1+nx)%nx] + u[nx*((j_p-1+ny)%ny) + (i_p+nx)%nx]);
-						//
-						// u_p = u[nx*((ny+j_p)%ny) + (i_p+nx)%nx];
-						// u_q = u[nx*((j+ny)%ny) + (i+nx)%nx];
-
 						//nouveau
 						W_q = G*(ny-j-0.5f)*h - H[nx*j+i];
 
-						//printf("gravité: %f, surface: %f \n",G*(ny-j-0.5)*h,H[nx*j+i]);
 						if(j==0){
 							W_p = G*(ny-(-1.0f)-0.5f)*h - H[nx*(ny-1) + i_p];
 						}else{
 							W_p = G*(ny-j_p-0.5f)*h - H[nx*j_p+i_p];
 						}
 
-						//auteurs
-						// W_q = G*(ny-j-0.5);
-						// if(j==0){
-						// 	W_p = G*(ny-(-1)-0.5);
-						// }else{
-						// 	W_p = G*(ny-j_p-0.5);
-						// }
-
-
-						//M = (2.0/3.0) * 1.0/(1.0/(u[nx*j_p + i_p]*u[nx*j_p + i_p]*u[nx*j_p + i_p]) + 1.0/(u[nx*j + i]*u[nx*j + i]*u[nx*j + i]));
 						M = 2.0f * u_q*u_q * u_p*u_p /(3.0f*(u_q + u_p)) + (e/6.0f)*u_q*u_q*u_p*u_p*(H_E+k_E) + (beta/2.0f)*(u_p*u_p + u_q*u_q);
-
-						//nouveau
-						// theta = h*h + (2.0*tau*M*(4.0*e + eta));
-						// f = -(M*h/(theta)) * ((5.0*e + eta)*(u_q - u_p) - e*(lap_q - lap_p) + W_q-W_p);
 
 						//3D
 						theta = h*h + (tau*M*(8.0f*e + 2.0f*eta + G*e*(ct_p + ct_q) - e*(T_p + T_q)));
 						f = -(M*h/(theta)) * ((5.0f*e + eta)*(u_q - u_p) - e*(lap_q - lap_p) + W_q-W_p + e*((G*ct_q - T_q)*u_q - (G*ct_p - T_p)*u_p));
-
-						//auteurs
-						// theta = 1.0 + (2.0*tau*M*(5.0*e + eta));
-						// f = -(M/(theta)) * ((5.0*e + eta)*(u_q - u_p) - e*(lap_q - lap_p) + W_q-W_p);
-
-
-
-						// mini = min(u_p,tau*f/h);
-						// delta_u = max(-u_q, mini);
 
 						float val = tau*f/h;
 						if(u_p<val){
@@ -362,10 +369,6 @@ int main(int argc, char *argv[]){
 							}
 						}
 
-						// if (i==256 && j==300){
-						// 	printf("Gravity : %f, viscous: %f, stab: %f and delta_u = %f \n ", W_q-W_p, 5.0*e*(u_q-u_p)-e*(lap_q-lap_p), eta*(u_q-u_p), delta_u);
-						// }
-
 						u[nx*j + i] = u[nx*j + i] + delta_u;
 						u[nx*j_p + i_p] = u[nx*j_p + i_p] - delta_u;
 				}
@@ -373,26 +376,35 @@ int main(int argc, char *argv[]){
 		}
 	}
 
-		plt::clf();
 
-		sprintf(title, "Time = %f", t*tau*n_passe/10.0);
-		const int colors = 1;
-
-    plt::title(title);
-    plt::imshow(&(u[0]), ny, nx, colors);
-
-    // Show plots
-    plt::pause(0.00001f);
-
-
+	for (int i = 0; i < nx*nx; i++) {
+			colors[i] = (float) (u[i]);
 	}
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo_colors);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STREAM_DRAW);
+
+
+	// Draw elements
+	glDrawElements(GL_LINES_ADJACENCY, 4*(nx-1)*(nx-1), GL_UNSIGNED_INT, 0);
+
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+			glfwSetWindowShouldClose(window, GL_TRUE);
+}
+
+	// gettimeofday(&start, NULL);
+	//
+	// gettimeofday(&end, NULL);
+	//
+	// float delta = ((end.tv_sec  - start.tv_sec) * 1000000u +
+	//          end.tv_usec - start.tv_usec) / 1.e6;
+  // printf("Time taken: %f \n", delta);
+
+
+//}
 	// end = omp_get_wtime();
 	// printf("time taken: %f seconds", end-start);
-	gettimeofday(&end, NULL);
 
-	float delta = ((end.tv_sec  - start.tv_sec) * 1000000u +
-	         end.tv_usec - start.tv_usec) / 1.e6;
-  printf("Time taken: %f \n", delta);
 
 	//free memory
 	free(u);

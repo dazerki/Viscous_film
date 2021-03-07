@@ -5,7 +5,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/antoine/Documents/Viscous/CPU/src/project.c" "/home/antoine/Documents/Viscous/CPU/build/CMakeFiles/project.dir/src/project.c.o"
+  "/home/antoine/Documents/Viscous/CPU/src/shaders.c" "/home/antoine/Documents/Viscous/CPU/build/CMakeFiles/project.dir/src/shaders.c.o"
   "/home/antoine/Documents/Viscous/CPU/src/viscous.c" "/home/antoine/Documents/Viscous/CPU/build/CMakeFiles/project.dir/src/viscous.c.o"
+  "/home/antoine/Documents/Viscous/CPU/src/window.c" "/home/antoine/Documents/Viscous/CPU/build/CMakeFiles/project.dir/src/window.c.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

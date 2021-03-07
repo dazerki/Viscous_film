@@ -150,6 +150,33 @@ src/project.c.s:
 	$(MAKE) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/src/project.c.s
 .PHONY : src/project.c.s
 
+src/shaders.o: src/shaders.c.o
+
+.PHONY : src/shaders.o
+
+# target to build an object file
+src/shaders.c.o:
+	$(MAKE) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/src/shaders.c.o
+.PHONY : src/shaders.c.o
+
+src/shaders.i: src/shaders.c.i
+
+.PHONY : src/shaders.i
+
+# target to preprocess a source file
+src/shaders.c.i:
+	$(MAKE) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/src/shaders.c.i
+.PHONY : src/shaders.c.i
+
+src/shaders.s: src/shaders.c.s
+
+.PHONY : src/shaders.s
+
+# target to generate assembly for a file
+src/shaders.c.s:
+	$(MAKE) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/src/shaders.c.s
+.PHONY : src/shaders.c.s
+
 src/viscous.o: src/viscous.c.o
 
 .PHONY : src/viscous.o
@@ -177,6 +204,33 @@ src/viscous.c.s:
 	$(MAKE) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/src/viscous.c.s
 .PHONY : src/viscous.c.s
 
+src/window.o: src/window.c.o
+
+.PHONY : src/window.o
+
+# target to build an object file
+src/window.c.o:
+	$(MAKE) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/src/window.c.o
+.PHONY : src/window.c.o
+
+src/window.i: src/window.c.i
+
+.PHONY : src/window.i
+
+# target to preprocess a source file
+src/window.c.i:
+	$(MAKE) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/src/window.c.i
+.PHONY : src/window.c.i
+
+src/window.s: src/window.c.s
+
+.PHONY : src/window.s
+
+# target to generate assembly for a file
+src/window.c.s:
+	$(MAKE) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/src/window.c.s
+.PHONY : src/window.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -189,9 +243,15 @@ help:
 	@echo "... src/project.o"
 	@echo "... src/project.i"
 	@echo "... src/project.s"
+	@echo "... src/shaders.o"
+	@echo "... src/shaders.i"
+	@echo "... src/shaders.s"
 	@echo "... src/viscous.o"
 	@echo "... src/viscous.i"
 	@echo "... src/viscous.s"
+	@echo "... src/window.o"
+	@echo "... src/window.i"
+	@echo "... src/window.s"
 .PHONY : help
 
 
